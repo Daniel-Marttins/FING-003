@@ -56,7 +56,9 @@ export function Layout({ children }: LayoutProps) {
     (item) => item.href !== "#inicio" && !mobilePrimarySet.has(item.href),
   );
 
-  const overflowIsActive = overflowItems.some((item) => isActivePath(item.href));
+  const overflowIsActive = overflowItems.some((item) =>
+    isActivePath(item.href),
+  );
 
   const renderStandardMobileItem = (item?: NavigationItem) => {
     if (!item) {
@@ -114,7 +116,9 @@ export function Layout({ children }: LayoutProps) {
         >
           <Icon className="h-6 w-6" />
         </span>
-        <span className="text-[11px] leading-none text-primary">{centerItem.name}</span>
+        <span className="text-[11px] leading-none text-primary">
+          {centerItem.name}
+        </span>
       </button>
     );
   };
@@ -165,7 +169,8 @@ export function Layout({ children }: LayoutProps) {
     );
   };
 
-  const [firstMobileItem, secondMobileItem, thirdMobileItem] = mobilePrimaryItems;
+  const [firstMobileItem, secondMobileItem, thirdMobileItem] =
+    mobilePrimaryItems;
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,7 +209,6 @@ export function Layout({ children }: LayoutProps) {
                 </button>
               ))}
             </nav>
-
           </div>
         </div>
       </header>
