@@ -7,7 +7,13 @@ type SponsorsMarqueeProps = {
   className?: string;
 };
 
-function Row({ items, reverse = false }: { items: Sponsor[]; reverse?: boolean }) {
+function Row({
+  items,
+  reverse = false,
+}: {
+  items: Sponsor[];
+  reverse?: boolean;
+}) {
   return (
     <div
       className={cn(
@@ -46,11 +52,18 @@ function Row({ items, reverse = false }: { items: Sponsor[]; reverse?: boolean }
   );
 }
 
-export function SponsorsMarquee({ sponsors = defaultSponsors, title = "Patrocinadores", className }: SponsorsMarqueeProps) {
+export function SponsorsMarquee({
+  sponsors = defaultSponsors,
+  title = "Patrocinadores",
+  className,
+}: SponsorsMarqueeProps) {
   if (!sponsors || sponsors.length === 0) return null;
 
   return (
-    <section className={cn("relative overflow-hidden", className)} aria-label={title}>
+    <section
+      className={cn("relative overflow-hidden", className)}
+      aria-label={title}
+    >
       <div className="container mx-auto px-4">
         <div className="mb-6 text-center">
           <h3 className="text-xl font-semibold tracking-tight">{title}</h3>

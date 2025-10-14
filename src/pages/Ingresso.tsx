@@ -2,7 +2,6 @@ import { FormEvent, Fragment } from "react";
 import {
   ArrowRight,
   Calendar,
-
   Clock,
   MapPin,
   Shield,
@@ -20,7 +19,6 @@ interface MarqueeImage {
   src: string;
   alt: string;
 }
-
 
 const marqueeImages: MarqueeImage[] = [
   {
@@ -48,7 +46,6 @@ const marqueeImages: MarqueeImage[] = [
     alt: "Equipe comemorando resultado de hackathon",
   },
 ];
-
 
 const registrationBenefits = [
   {
@@ -261,7 +258,6 @@ export default function Ingresso() {
           </div>
         </div>
       </section>
-
 
       <section id="inscricao" className="relative py-24">
         <div className="container mx-auto px-4">
