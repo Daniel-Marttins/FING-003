@@ -96,45 +96,7 @@ export function Layout({ children }: LayoutProps) {
               ))}
             </nav>
 
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden hover:bg-primary/10 transition-colors duration-200"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </Button>
           </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t border-border/40">
-              <nav className="flex flex-col space-y-1">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => handleNavClickWithMenu(item.href)}
-                      className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg mx-2 ${
-                        isActivePath(item.href)
-                          ? "bg-primary/10 text-primary border-l-2 border-primary"
-                          : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span>{item.name}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
-          )}
         </div>
       </header>
 
@@ -171,7 +133,7 @@ export function Layout({ children }: LayoutProps) {
               <h3 className="font-semibold mb-4">Contato</h3>
               <div className="space-y-2 text-sm text-muted-foreground">
                 <p>📧 contato@fing2024.com.br</p>
-                <p>📱 (87) 99999-9999</p>
+                <p>��� (87) 99999-9999</p>
                 <p>📍 Garanhuns - PE</p>
               </div>
             </div>
