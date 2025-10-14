@@ -289,12 +289,15 @@ export function GallerySection({
             onTouchEnd={startAutoplay}
           >
             <CarouselContent className="py-2 items-stretch">
-            {galleryEditions.map((edition, index) => (
-              <CarouselItem key={edition.year} className="h-full pl-0 sm:pl-4">
-                <EditionCard edition={edition} inverted={index % 2 === 1} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+              {galleryEditions.map((edition, index) => (
+                <CarouselItem
+                  key={edition.year}
+                  className="h-full pl-0 sm:pl-4"
+                >
+                  <EditionCard edition={edition} inverted={index % 2 === 1} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
 
             <CarouselPrevious
               variant="ghost"

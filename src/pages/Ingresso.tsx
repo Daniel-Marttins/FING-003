@@ -219,25 +219,21 @@ export default function Ingresso() {
 
   return (
     <div className="bg-background text-foreground">
-      <section
-        id="inicio"
-        className="relative overflow-hidden"
-      >
+      <section id="inicio" className="relative overflow-hidden">
         <MarqueeBackground />
         <div className="container relative mx-auto flex min-h-[90vh] flex-col justify-center px-4 py-24">
           <div className="max-w-3xl space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-4 py-2 text-sm font-semibold text-primary">
-              <Sparkles className="h-4 w-4" />
-              A experiência oficial do FING 2024
+              <Sparkles className="h-4 w-4" />A experiência oficial do FING 2024
             </span>
             <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">
               Garanta seu lugar no festival que está redefinindo o futuro dos
               negócios
             </h1>
             <p className="text-lg text-muted-foreground md:text-xl">
-              Inscreva-se para viver três dias intensos de conexões estratégicas,
-              conteúdo de alto impacto e oportunidades para acelerar seu projeto
-              ou empresa.
+              Inscreva-se para viver três dias intensos de conexões
+              estratégicas, conteúdo de alto impacto e oportunidades para
+              acelerar seu projeto ou empresa.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="group">
@@ -247,9 +243,7 @@ export default function Ingresso() {
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/">
-                  Voltar para o site
-                </Link>
+                <Link to="/">Voltar para o site</Link>
               </Button>
             </div>
             <div className="grid gap-4 pt-6 sm:grid-cols-2">
@@ -287,8 +281,8 @@ export default function Ingresso() {
               Mais do que um ingresso, um passaporte para o futuro
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Tenha acesso a espaços exclusivos, experiências imersivas e uma rede
-              preparada para impulsionar novas oportunidades de negócios na
+              Tenha acesso a espaços exclusivos, experiências imersivas e uma
+              rede preparada para impulsionar novas oportunidades de negócios na
               região.
             </p>
           </div>
@@ -320,8 +314,8 @@ export default function Ingresso() {
               Escolha o passaporte ideal para sua jornada
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Cada modalidade foi pensada para garantir a melhor experiência de acordo
-              com seus objetivos no FING.
+              Cada modalidade foi pensada para garantir a melhor experiência de
+              acordo com seus objetivos no FING.
             </p>
           </div>
 
@@ -353,7 +347,10 @@ export default function Ingresso() {
                     </li>
                   ))}
                 </ul>
-                <Button className="mt-10 w-full" variant={tier.highlight ? "default" : "outline"}>
+                <Button
+                  className="mt-10 w-full"
+                  variant={tier.highlight ? "default" : "outline"}
+                >
                   Quero este passaporte
                 </Button>
               </div>
@@ -374,9 +371,9 @@ export default function Ingresso() {
                 Dê o primeiro passo para viver o melhor do FING 2024
               </h2>
               <p className="text-lg text-muted-foreground">
-                Preencha o formulário ao lado e receba em primeira mão os próximos
-                passos para garantir seu ingresso. Nossa equipe retornará com opções
-                personalizadas conforme seu perfil.
+                Preencha o formulário ao lado e receba em primeira mão os
+                próximos passos para garantir seu ingresso. Nossa equipe
+                retornará com opções personalizadas conforme seu perfil.
               </p>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -385,10 +382,12 @@ export default function Ingresso() {
                     <Calendar className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold">Agenda personalizada</h3>
+                    <h3 className="text-sm font-semibold">
+                      Agenda personalizada
+                    </h3>
                     <p className="text-xs text-muted-foreground">
-                      Receba recomendações de trilhas e workshops alinhados ao seu
-                      objetivo.
+                      Receba recomendações de trilhas e workshops alinhados ao
+                      seu objetivo.
                     </p>
                   </div>
                 </div>
@@ -414,7 +413,10 @@ export default function Ingresso() {
               <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
               <div className="grid gap-5">
                 <div>
-                  <label htmlFor="nome" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="nome"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     Nome completo
                   </label>
                   <input
@@ -427,7 +429,10 @@ export default function Ingresso() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="email"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     E-mail profissional
                   </label>
                   <input
@@ -441,7 +446,10 @@ export default function Ingresso() {
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="telefone" className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="telefone"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       WhatsApp
                     </label>
                     <input
@@ -454,7 +462,10 @@ export default function Ingresso() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="empresa" className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="empresa"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Empresa ou projeto
                     </label>
                     <input
@@ -468,7 +479,10 @@ export default function Ingresso() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="segmento" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="segmento"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     Segmento de atuação
                   </label>
                   <select
@@ -486,7 +500,10 @@ export default function Ingresso() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="objetivo" className="text-sm font-semibold text-foreground">
+                  <label
+                    htmlFor="objetivo"
+                    className="text-sm font-semibold text-foreground"
+                  >
                     Objetivo principal no FING
                   </label>
                   <textarea
@@ -501,8 +518,8 @@ export default function Ingresso() {
                 <div className="flex items-start gap-3 rounded-2xl border border-border/60 bg-background/80 p-4 text-xs text-muted-foreground">
                   <Shield className="mt-0.5 h-4 w-4 text-primary" />
                   <p>
-                    Seus dados serão utilizados exclusivamente para contato sobre o
-                    FING 2024, conforme nossa política de privacidade.
+                    Seus dados serão utilizados exclusivamente para contato
+                    sobre o FING 2024, conforme nossa política de privacidade.
                   </p>
                 </div>
                 <Button size="lg" className="mt-2 w-full" type="submit">
@@ -517,9 +534,12 @@ export default function Ingresso() {
       <section id="faq" className="relative bg-muted/40 py-24">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Perguntas frequentes</h2>
+            <h2 className="text-3xl font-bold md:text-4xl">
+              Perguntas frequentes
+            </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Tire suas dúvidas sobre os ingressos, formatos e condições especiais.
+              Tire suas dúvidas sobre os ingressos, formatos e condições
+              especiais.
             </p>
           </div>
           <div className="mx-auto mt-12 max-w-4xl space-y-6">

@@ -69,7 +69,9 @@ export function EditionCard({ edition, inverted = false }: EditionCardProps) {
 
         <div className="flex flex-1 flex-col gap-8 p-8 lg:w-3/5">
           <header className="space-y-3">
-            <h3 className="text-2xl font-bold text-foreground">{edition.title}</h3>
+            <h3 className="text-2xl font-bold text-foreground">
+              {edition.title}
+            </h3>
             <p className="leading-relaxed text-muted-foreground">
               {edition.description}
             </p>
@@ -84,7 +86,9 @@ export function EditionCard({ edition, inverted = false }: EditionCardProps) {
                 <span className="block text-2xl font-bold text-primary">
                   {stat.value}
                 </span>
-                <span className="text-sm text-muted-foreground">{stat.label}</span>
+                <span className="text-sm text-muted-foreground">
+                  {stat.label}
+                </span>
               </li>
             ))}
           </ul>
