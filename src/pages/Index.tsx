@@ -12,6 +12,7 @@ import {
   Award,
   Heart,
 } from "lucide-react";
+import { GallerySection } from "@/components/home/GallerySection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PalestranteModal } from "@/components/PalestranteModal";
@@ -145,6 +146,11 @@ export default function Index() {
   });
 
   const { ref: aboutRef, inView: aboutInView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  const { ref: galeriaRef, inView: galeriaInView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
@@ -397,6 +403,12 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      <GallerySection
+        sectionRef={galeriaRef}
+        inView={galeriaInView}
+        fadeInClass={fadeInClass}
+      />
 
       {/* Realização Section */}
       <section
