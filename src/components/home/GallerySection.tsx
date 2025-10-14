@@ -103,6 +103,7 @@ export function GallerySection({
   fadeInClass,
 }: GallerySectionProps) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const apiRef = useRef<CarouselApi | null>(null);
   const autoplayRef = useRef<number | null>(null);
 
@@ -165,14 +166,23 @@ export function GallerySection({
       startAutoplay();
     };
 
+    const handleSelect = () => {
+      setCurrentIndex(carouselApi.selectedScrollSnap());
+      startAutoplay();
+    };
+
+    handleSelect();
+
     carouselApi.on("pointerDown", handleInteractionStart);
     carouselApi.on("pointerUp", handleInteractionEnd);
-    carouselApi.on("select", handleInteractionEnd);
+    carouselApi.on("select", handleSelect);
+    carouselApi.on("reInit", handleSelect);
 
     return () => {
       carouselApi.off("pointerDown", handleInteractionStart);
       carouselApi.off("pointerUp", handleInteractionEnd);
-      carouselApi.off("select", handleInteractionEnd);
+      carouselApi.off("select", handleSelect);
+      carouselApi.off("reInit", handleSelect);
     };
   }, [carouselApi, startAutoplay, stopAutoplay]);
 
@@ -279,27 +289,30 @@ export function GallerySection({
               ))}
             </CarouselContent>
 
-            <CarouselPrevious className="hidden h-12 w-12 -left-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex" />
-            <CarouselNext className="hidden h-12 w-12 -right-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex" />
+            <CarouselPrevious
+              variant="ghost"
+              className="hidden h-12 w-12 -left-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex"
+            />
+            <CarouselNext
+              variant="ghost"
+              className="hidden h-12 w-12 -right-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex"
+            />
 
             <div className="mt-8 flex justify-center gap-2">
-              {galleryEditions.map((edition, index) => {
-                const isActive = carouselApi?.selectedScrollSnap() === index;
-
-                return (
-                  <button
-                    key={edition.year}
-                    type="button"
-                    className={`h-2.5 w-8 rounded-full transition-all duration-300 ${
-                      isActive ? "bg-primary" : "bg-muted"
-                    }`}
-                    onClick={() => {
-                      apiRef.current?.scrollTo(index);
-                    }}
-                    aria-label={`Ir para edição ${edition.year}`}
-                  />
-                );
-              })}
+              {galleryEditions.map((edition, index) => (
+                <button
+                  key={edition.year}
+                  type="button"
+                  className={`h-2.5 w-8 rounded-full transition-all duration-300 ${
+                    currentIndex === index ? "bg-primary" : "bg-muted"
+                  }`}
+                  onClick={() => {
+                    apiRef.current?.scrollTo(index);
+                    setCurrentIndex(index);
+                  }}
+                  aria-label={`Ir para edição ${edition.year}`}
+                />
+              ))}
             </div>
           </Carousel>
         </div>
