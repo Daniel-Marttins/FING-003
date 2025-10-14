@@ -1,27 +1,33 @@
 import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  Menu,
-  X,
   Calendar,
   MapPin,
   Users,
   Clock,
   Info,
   Building,
+  Images,
+  MoreHorizontal,
 } from "lucide-react";
-import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { useActiveSection } from "@/hooks";
 import { LayoutProps, NavigationItem } from "@/types";
 
 export function Layout({ children }: LayoutProps) {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
   // Memoize navigation to prevent re-creation on every render
   const navigation: NavigationItem[] = useMemo(
     () => [
       { name: "Início", href: "#inicio", icon: Calendar },
       { name: "Sobre", href: "#sobre", icon: Info },
+      { name: "Galeria", href: "#galeria", icon: Images },
       { name: "Realização", href: "#realizacao", icon: Building },
       { name: "Localização", href: "#localizacao", icon: MapPin },
       { name: "Palestrantes", href: "#palestrantes", icon: Users },
@@ -40,10 +46,131 @@ export function Layout({ children }: LayoutProps) {
     return activeSection === hash;
   };
 
-  const handleNavClickWithMenu = (href: string) => {
-    handleNavClick(href);
-    setIsMenuOpen(false);
+  const mobilePrimaryKeys = ["#sobre", "#galeria", "#realizacao"] as const;
+  const mobilePrimarySet = new Set<string>([...mobilePrimaryKeys]);
+  const centerItem = navigation.find((item) => item.href === "#inicio");
+  const mobilePrimaryItems = mobilePrimaryKeys
+    .map((href) => navigation.find((item) => item.href === href) ?? null)
+    .filter((item): item is NavigationItem => item !== null);
+  const overflowItems = navigation.filter(
+    (item) => item.href !== "#inicio" && !mobilePrimarySet.has(item.href),
+  );
+
+  const overflowIsActive = overflowItems.some((item) =>
+    isActivePath(item.href),
+  );
+
+  const renderStandardMobileItem = (item?: NavigationItem) => {
+    if (!item) {
+      return <div />;
+    }
+
+    const Icon = item.icon;
+    const isActive = isActivePath(item.href);
+
+    return (
+      <button
+        type="button"
+        onClick={() => handleNavClick(item.href)}
+        className={cn(
+          "flex flex-col items-center gap-1 text-xs font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          isActive ? "text-primary" : "text-muted-foreground",
+        )}
+        aria-label={item.name}
+      >
+        <span
+          className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
+            isActive
+              ? "bg-primary/15 text-primary"
+              : "bg-muted text-foreground/70",
+          )}
+        >
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="text-[11px] leading-none">{item.name}</span>
+      </button>
+    );
   };
+
+  const renderCenterMobileItem = () => {
+    if (!centerItem) {
+      return null;
+    }
+
+    const Icon = centerItem.icon;
+    const isActive = isActivePath(centerItem.href);
+
+    return (
+      <button
+        type="button"
+        onClick={() => handleNavClick(centerItem.href)}
+        className="relative -translate-y-6 flex flex-col items-center gap-2 text-xs font-semibold text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label={centerItem.name}
+      >
+        <span
+          className={cn(
+            "flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform ring-4 ring-background",
+            isActive ? "-translate-y-0.5" : "translate-y-0",
+          )}
+        >
+          <Icon className="h-6 w-6" />
+        </span>
+        <span className="text-[11px] leading-none text-primary">
+          {centerItem.name}
+        </span>
+      </button>
+    );
+  };
+
+  const renderMoreMobileItem = () => {
+    if (overflowItems.length === 0) {
+      return <div />;
+    }
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "flex flex-col items-center gap-1 text-xs font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              overflowIsActive ? "text-primary" : "text-muted-foreground",
+            )}
+            aria-label="Mais seções"
+          >
+            <span
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
+                overflowIsActive
+                  ? "bg-primary/15 text-primary"
+                  : "bg-muted text-foreground/70",
+              )}
+            >
+              <MoreHorizontal className="h-5 w-5" />
+            </span>
+            <span className="text-[11px] leading-none">Mais</span>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" sideOffset={12}>
+          {overflowItems.map((item) => (
+            <DropdownMenuItem
+              key={item.href}
+              onSelect={(event) => {
+                event.preventDefault();
+                handleNavClick(item.href);
+              }}
+            >
+              {item.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
+
+  const [firstMobileItem, secondMobileItem, thirdMobileItem] =
+    mobilePrimaryItems;
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,55 +209,29 @@ export function Layout({ children }: LayoutProps) {
                 </button>
               ))}
             </nav>
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden hover:bg-primary/10 transition-colors duration-200"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </Button>
           </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t border-border/40">
-              <nav className="flex flex-col space-y-1">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => handleNavClickWithMenu(item.href)}
-                      className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg mx-2 ${
-                        isActivePath(item.href)
-                          ? "bg-primary/10 text-primary border-l-2 border-primary"
-                          : "text-foreground/80 hover:text-foreground hover:bg-muted/50"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span>{item.name}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
-          )}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="pt-16">{children}</main>
+      <main className="pt-16 pb-28 md:pb-0">{children}</main>
+
+      {/* Bottom Navigation */}
+      {centerItem && (
+        <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border/40 bg-background/95 backdrop-blur md:hidden">
+          <div className="mx-auto grid min-h-[86px] w-full max-w-lg grid-cols-5 items-end gap-2 px-4 pb-3 pt-2">
+            {renderStandardMobileItem(firstMobileItem)}
+            {renderStandardMobileItem(secondMobileItem)}
+            {renderCenterMobileItem()}
+            {renderStandardMobileItem(thirdMobileItem)}
+            {renderMoreMobileItem()}
+          </div>
+        </nav>
+      )}
 
       {/* Footer */}
       <footer className="bg-card border-t">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 pt-12 pb-28 md:py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* About */}
             <div>
@@ -158,7 +259,7 @@ export function Layout({ children }: LayoutProps) {
               <h3 className="font-semibold mb-4">Contato</h3>
               <div className="space-y-2 text-sm text-muted-foreground">
                 <p>📧 contato@fing2024.com.br</p>
-                <p>📱 (87) 99999-9999</p>
+                <p>��� (87) 99999-9999</p>
                 <p>📍 Garanhuns - PE</p>
               </div>
             </div>
