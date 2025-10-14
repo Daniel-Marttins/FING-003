@@ -47,7 +47,7 @@ export function EditionCard({ edition, inverted = false }: EditionCardProps) {
   };
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-border/40 bg-background/95 shadow-lg backdrop-blur">
+    <article className="flex h-full min-h-[600px] flex-col overflow-hidden rounded-3xl border border-border/40 bg-background/95 shadow-lg backdrop-blur lg:min-h-[520px]">
       <div
         className={cn(
           "flex flex-1 flex-col lg:flex-row",
