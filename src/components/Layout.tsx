@@ -9,6 +9,7 @@ import {
   Clock,
   Info,
   Building,
+  Images,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useActiveSection } from "@/hooks";
@@ -22,6 +23,7 @@ export function Layout({ children }: LayoutProps) {
     () => [
       { name: "Início", href: "#inicio", icon: Calendar },
       { name: "Sobre", href: "#sobre", icon: Info },
+      { name: "Galeria", href: "#galeria", icon: Images },
       { name: "Realização", href: "#realizacao", icon: Building },
       { name: "Localização", href: "#localizacao", icon: MapPin },
       { name: "Palestrantes", href: "#palestrantes", icon: Users },
