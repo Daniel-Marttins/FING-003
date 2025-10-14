@@ -7,6 +7,7 @@ import { Layout } from "./components/Layout";
 import { AdminLayout } from "./components/AdminLayout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Index from "./pages/Index";
+import Ingresso from "./pages/Ingresso";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPalestrantes from "./pages/AdminPalestrantes";
@@ -33,6 +34,14 @@ const App = () => (
             element={
               <Layout>
                 <Index />
+              </Layout>
+            }
+          />
+          <Route
+            path="/ingresso"
+            element={
+              <Layout>
+                <Ingresso />
               </Layout>
             }
           />
