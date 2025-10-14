@@ -58,6 +58,115 @@ export function Layout({ children }: LayoutProps) {
 
   const overflowIsActive = overflowItems.some((item) => isActivePath(item.href));
 
+  const renderStandardMobileItem = (item?: NavigationItem) => {
+    if (!item) {
+      return <div />;
+    }
+
+    const Icon = item.icon;
+    const isActive = isActivePath(item.href);
+
+    return (
+      <button
+        type="button"
+        onClick={() => handleNavClick(item.href)}
+        className={cn(
+          "flex flex-col items-center gap-1 text-xs font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          isActive ? "text-primary" : "text-muted-foreground",
+        )}
+        aria-label={item.name}
+      >
+        <span
+          className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
+            isActive
+              ? "bg-primary/15 text-primary"
+              : "bg-muted text-foreground/70",
+          )}
+        >
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="text-[11px] leading-none">{item.name}</span>
+      </button>
+    );
+  };
+
+  const renderCenterMobileItem = () => {
+    if (!centerItem) {
+      return null;
+    }
+
+    const Icon = centerItem.icon;
+    const isActive = isActivePath(centerItem.href);
+
+    return (
+      <button
+        type="button"
+        onClick={() => handleNavClick(centerItem.href)}
+        className="relative -translate-y-6 flex flex-col items-center gap-2 text-xs font-semibold text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        aria-label={centerItem.name}
+      >
+        <span
+          className={cn(
+            "flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl transition-transform ring-4 ring-background",
+            isActive ? "-translate-y-0.5" : "translate-y-0",
+          )}
+        >
+          <Icon className="h-6 w-6" />
+        </span>
+        <span className="text-[11px] leading-none text-primary">{centerItem.name}</span>
+      </button>
+    );
+  };
+
+  const renderMoreMobileItem = () => {
+    if (overflowItems.length === 0) {
+      return <div />;
+    }
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "flex flex-col items-center gap-1 text-xs font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              overflowIsActive ? "text-primary" : "text-muted-foreground",
+            )}
+            aria-label="Mais seções"
+          >
+            <span
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-full transition-colors",
+                overflowIsActive
+                  ? "bg-primary/15 text-primary"
+                  : "bg-muted text-foreground/70",
+              )}
+            >
+              <MoreHorizontal className="h-5 w-5" />
+            </span>
+            <span className="text-[11px] leading-none">Mais</span>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" sideOffset={12}>
+          {overflowItems.map((item) => (
+            <DropdownMenuItem
+              key={item.href}
+              onSelect={(event) => {
+                event.preventDefault();
+                handleNavClick(item.href);
+              }}
+            >
+              {item.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
+
+  const [firstMobileItem, secondMobileItem, thirdMobileItem] = mobilePrimaryItems;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
