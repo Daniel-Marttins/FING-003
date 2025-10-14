@@ -9,22 +9,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 
-interface GalleryStat {
-  label: string;
-  value: string;
-}
-
-interface GalleryEdition {
-  year: string;
-  title: string;
-  description: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  stats: GalleryStat[];
-  highlights: string[];
-}
+import { EditionCard, type GalleryEdition } from "./EditionCard";
 
 interface GallerySectionProps {
   sectionRef: (node: HTMLElement | null) => void;
@@ -54,6 +39,32 @@ const galleryEditions: GalleryEdition[] = [
       "Mentorias exclusivas com investidores",
       "Hackathon de soluções urbanas",
     ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80",
+        alt: "Participantes interagindo em um estande da edição 2023",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80",
+        alt: "Palestra concorrida durante a edição 2023",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1542744095-291d1f67b221?auto=format&fit=crop&w=900&q=80",
+        alt: "Mentoria individual com especialista na edição 2023",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1454165205744-3b78555e5572?auto=format&fit=crop&w=900&q=80",
+        alt: "Exposição de startups com tecnologia aplicada",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+        alt: "Área de networking da edição 2023",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+        alt: "Painel sobre inovação digital no FING 2023",
+      },
+    ],
   },
   {
     year: "2022",
@@ -74,6 +85,32 @@ const galleryEditions: GalleryEdition[] = [
       "Painéis sobre ESG e sustentabilidade",
       "Feira de negócios criativos regionais",
     ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
+        alt: "Dinâmica em grupo focada em impacto social no FING 2022",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80",
+        alt: "Mentoria coletiva durante a edição 2022",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=900&q=80",
+        alt: "Participantes registrando ideias colaborativas",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=900&q=80",
+        alt: "Painel sobre sustentabilidade e ESG",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=900&q=80",
+        alt: "Startup apresentando solução de impacto social",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1531379410502-63bfe8cdaf6f?auto=format&fit=crop&w=900&q=80",
+        alt: "Networking entre participantes da edição 2022",
+      },
+    ],
   },
   {
     year: "2021",
@@ -93,6 +130,32 @@ const galleryEditions: GalleryEdition[] = [
       "Primeiro laboratório de ideias colaborativas",
       "Matchmaking entre startups e investidores",
       "Lançamento do programa Comunidade Sete Colinas",
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80",
+        alt: "Empreendedores trocando experiências na edição 2021",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
+        alt: "Oficina prática de co-criação em 2021",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1521737451536-00a86f630f14?auto=format&fit=crop&w=900&q=80",
+        alt: "Apresentação de negócios locais na edição inaugural",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1517148815978-75f6acaaf32c?auto=format&fit=crop&w=900&q=80",
+        alt: "Participantes conectando-se em área de convivência em 2021",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=80",
+        alt: "Primeiro painel colaborativo do FING",
+      },
+      {
+        src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
+        alt: "Registro coletivo de metas da comunidade FING",
+      },
     ],
   },
 ];
@@ -225,69 +288,13 @@ export function GallerySection({
             onTouchStart={stopAutoplay}
             onTouchEnd={startAutoplay}
           >
-            <CarouselContent className="py-2">
-              {galleryEditions.map((edition, index) => (
-                <CarouselItem key={edition.year} className="pl-0 sm:pl-4">
-                  <article className="overflow-hidden rounded-3xl border border-border/40 bg-background/95 shadow-lg backdrop-blur">
-                    <div
-                      className={`flex flex-col lg:flex-row ${
-                        index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                      }`}
-                    >
-                      <div className="relative lg:w-2/5">
-                        <img
-                          src={edition.image.src}
-                          alt={edition.image.alt}
-                          className="h-full w-full object-cover"
-                        />
-                        <div className="absolute left-6 top-6 rounded-full bg-background/90 px-4 py-2 text-sm font-semibold text-primary shadow-lg backdrop-blur">
-                          Edição {edition.year}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-1 flex-col gap-8 p-8 lg:w-3/5">
-                        <header className="space-y-3">
-                          <h3 className="text-2xl font-bold text-foreground">
-                            {edition.title}
-                          </h3>
-                          <p className="leading-relaxed text-muted-foreground">
-                            {edition.description}
-                          </p>
-                        </header>
-
-                        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                          {edition.stats.map((stat) => (
-                            <li
-                              key={`${edition.year}-${stat.label}`}
-                              className="rounded-2xl border border-border/60 bg-muted/40 p-4 text-center"
-                            >
-                              <span className="block text-2xl font-bold text-primary">
-                                {stat.value}
-                              </span>
-                              <span className="text-sm text-muted-foreground">
-                                {stat.label}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-
-                        <div className="flex flex-wrap gap-3">
-                          {edition.highlights.map((highlight) => (
-                            <span
-                              key={`${edition.year}-${highlight}`}
-                              className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-medium text-accent"
-                            >
-                              <Sparkles className="h-4 w-4" />
-                              {highlight}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
+            <CarouselContent className="py-2 items-stretch">
+            {galleryEditions.map((edition, index) => (
+              <CarouselItem key={edition.year} className="h-full pl-0 sm:pl-4">
+                <EditionCard edition={edition} inverted={index % 2 === 1} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
 
             <CarouselPrevious
               variant="ghost"
