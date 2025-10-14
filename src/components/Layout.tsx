@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  Menu,
-  X,
   Calendar,
   MapPin,
   Users,
@@ -10,8 +9,15 @@ import {
   Info,
   Building,
   Images,
+  MoreHorizontal,
 } from "lucide-react";
-import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { useActiveSection } from "@/hooks";
 import { LayoutProps, NavigationItem } from "@/types";
 
