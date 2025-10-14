@@ -1,4 +1,13 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Sparkles } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 interface GalleryStat {
   label: string;
@@ -22,6 +31,8 @@ interface GallerySectionProps {
   inView: boolean;
   fadeInClass: string;
 }
+
+const AUTOPLAY_DELAY = 7000;
 
 const galleryEditions: GalleryEdition[] = [
   {
@@ -91,11 +102,85 @@ export function GallerySection({
   inView,
   fadeInClass,
 }: GallerySectionProps) {
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const apiRef = useRef<CarouselApi | null>(null);
+  const autoplayRef = useRef<number | null>(null);
+
+  const stopAutoplay = useCallback(() => {
+    if (autoplayRef.current !== null) {
+      window.clearInterval(autoplayRef.current);
+      autoplayRef.current = null;
+    }
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    stopAutoplay();
+
+    if (!apiRef.current) {
+      return;
+    }
+
+    autoplayRef.current = window.setInterval(() => {
+      const api = apiRef.current;
+
+      if (!api) {
+        return;
+      }
+
+      if (api.canScrollNext()) {
+        api.scrollNext();
+      } else {
+        api.scrollTo(0);
+      }
+    }, AUTOPLAY_DELAY);
+  }, [stopAutoplay]);
+
+  const handleSetApi = useCallback((api: CarouselApi) => {
+    apiRef.current = api;
+    setCarouselApi(api);
+  }, []);
+
+  useEffect(() => {
+    if (!carouselApi) {
+      return;
+    }
+
+    startAutoplay();
+
+    return () => {
+      stopAutoplay();
+    };
+  }, [carouselApi, startAutoplay, stopAutoplay]);
+
+  useEffect(() => {
+    if (!carouselApi) {
+      return;
+    }
+
+    const handleInteractionStart = () => {
+      stopAutoplay();
+    };
+
+    const handleInteractionEnd = () => {
+      startAutoplay();
+    };
+
+    carouselApi.on("pointerDown", handleInteractionStart);
+    carouselApi.on("pointerUp", handleInteractionEnd);
+    carouselApi.on("select", handleInteractionEnd);
+
+    return () => {
+      carouselApi.off("pointerDown", handleInteractionStart);
+      carouselApi.off("pointerUp", handleInteractionEnd);
+      carouselApi.off("select", handleInteractionEnd);
+    };
+  }, [carouselApi, startAutoplay, stopAutoplay]);
+
   return (
     <section
       id="galeria"
       ref={sectionRef}
-      className="relative py-24 bg-muted/30 overflow-hidden"
+      className="relative overflow-hidden bg-muted/30 py-24"
     >
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-primary/5 via-background to-accent/5" />
       <div className="container relative mx-auto px-4">
@@ -104,7 +189,7 @@ export function GallerySection({
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <div className="text-center mb-16">
+          <div className="mb-16 text-center">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
               <Sparkles className="h-4 w-4" />
               Galeria de edições
@@ -112,77 +197,111 @@ export function GallerySection({
             <h2 className="mt-6 text-3xl font-bold md:text-4xl">
               Memórias que inspiram o futuro
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
               Reviva os melhores momentos de cada edição do FING e acompanhe a
               evolução do festival que movimenta o ecossistema de inovação do
               Agreste pernambucano.
             </p>
           </div>
 
-          <div className="space-y-12">
-            {galleryEditions.map((edition, index) => (
-              <article
-                key={edition.year}
-                className="overflow-hidden rounded-3xl border border-border/40 bg-background/95 shadow-lg backdrop-blur"
-              >
-                <div
-                  className={`flex flex-col lg:flex-row ${
-                    index % 2 === 1 ? "lg:flex-row-reverse" : ""
-                  }`}
-                >
-                  <div className="relative lg:w-2/5">
-                    <img
-                      src={edition.image.src}
-                      alt={edition.image.alt}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute left-6 top-6 rounded-full bg-background/90 px-4 py-2 text-sm font-semibold text-primary shadow-lg backdrop-blur">
-                      Edição {edition.year}
+          <Carousel
+            setApi={handleSetApi}
+            opts={{ align: "start", loop: true }}
+            className="group mx-auto max-w-5xl"
+            onMouseEnter={stopAutoplay}
+            onMouseLeave={startAutoplay}
+            onFocus={stopAutoplay}
+            onBlur={startAutoplay}
+            onTouchStart={stopAutoplay}
+            onTouchEnd={startAutoplay}
+          >
+            <CarouselContent className="py-2">
+              {galleryEditions.map((edition, index) => (
+                <CarouselItem key={edition.year} className="pl-0 sm:pl-4">
+                  <article className="overflow-hidden rounded-3xl border border-border/40 bg-background/95 shadow-lg backdrop-blur">
+                    <div
+                      className={`flex flex-col lg:flex-row ${
+                        index % 2 === 1 ? "lg:flex-row-reverse" : ""
+                      }`}
+                    >
+                      <div className="relative lg:w-2/5">
+                        <img
+                          src={edition.image.src}
+                          alt={edition.image.alt}
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute left-6 top-6 rounded-full bg-background/90 px-4 py-2 text-sm font-semibold text-primary shadow-lg backdrop-blur">
+                          Edição {edition.year}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-1 flex-col gap-8 p-8 lg:w-3/5">
+                        <header className="space-y-3">
+                          <h3 className="text-2xl font-bold text-foreground">
+                            {edition.title}
+                          </h3>
+                          <p className="leading-relaxed text-muted-foreground">
+                            {edition.description}
+                          </p>
+                        </header>
+
+                        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                          {edition.stats.map((stat) => (
+                            <li
+                              key={`${edition.year}-${stat.label}`}
+                              className="rounded-2xl border border-border/60 bg-muted/40 p-4 text-center"
+                            >
+                              <span className="block text-2xl font-bold text-primary">
+                                {stat.value}
+                              </span>
+                              <span className="text-sm text-muted-foreground">
+                                {stat.label}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex flex-wrap gap-3">
+                          {edition.highlights.map((highlight) => (
+                            <span
+                              key={`${edition.year}-${highlight}`}
+                              className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-medium text-accent"
+                            >
+                              <Sparkles className="h-4 w-4" />
+                              {highlight}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </article>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
 
-                  <div className="flex flex-1 flex-col gap-8 p-8 lg:w-3/5">
-                    <header className="space-y-3">
-                      <h3 className="text-2xl font-bold text-foreground">
-                        {edition.title}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {edition.description}
-                      </p>
-                    </header>
+            <CarouselPrevious className="hidden h-12 w-12 -left-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex" />
+            <CarouselNext className="hidden h-12 w-12 -right-8 top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-0 bg-background/90 shadow-lg md:flex" />
 
-                    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                      {edition.stats.map((stat) => (
-                        <li
-                          key={`${edition.year}-${stat.label}`}
-                          className="rounded-2xl border border-border/60 bg-muted/40 p-4 text-center"
-                        >
-                          <span className="block text-2xl font-bold text-primary">
-                            {stat.value}
-                          </span>
-                          <span className="text-sm text-muted-foreground">
-                            {stat.label}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+            <div className="mt-8 flex justify-center gap-2">
+              {galleryEditions.map((edition, index) => {
+                const isActive = carouselApi?.selectedScrollSnap() === index;
 
-                    <div className="flex flex-wrap gap-3">
-                      {edition.highlights.map((highlight) => (
-                        <span
-                          key={`${edition.year}-${highlight}`}
-                          className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-medium text-accent"
-                        >
-                          <Sparkles className="h-4 w-4" />
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                return (
+                  <button
+                    key={edition.year}
+                    type="button"
+                    className={`h-2.5 w-8 rounded-full transition-all duration-300 ${
+                      isActive ? "bg-primary" : "bg-muted"
+                    }`}
+                    onClick={() => {
+                      apiRef.current?.scrollTo(index);
+                    }}
+                    aria-label={`Ir para edição ${edition.year}`}
+                  />
+                );
+              })}
+            </div>
+          </Carousel>
         </div>
       </div>
     </section>
