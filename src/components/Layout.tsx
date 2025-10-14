@@ -210,11 +210,24 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="pt-16">{children}</main>
+      <main className="pt-16 pb-28 md:pb-0">{children}</main>
+
+      {/* Bottom Navigation */}
+      {centerItem && (
+        <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border/40 bg-background/95 backdrop-blur md:hidden">
+          <div className="mx-auto grid min-h-[86px] w-full max-w-lg grid-cols-5 items-end gap-2 px-4 pb-3 pt-2">
+            {renderStandardMobileItem(firstMobileItem)}
+            {renderStandardMobileItem(secondMobileItem)}
+            {renderCenterMobileItem()}
+            {renderStandardMobileItem(thirdMobileItem)}
+            {renderMoreMobileItem()}
+          </div>
+        </nav>
+      )}
 
       {/* Footer */}
       <footer className="bg-card border-t">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 pt-12 pb-28 md:py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* About */}
             <div>
