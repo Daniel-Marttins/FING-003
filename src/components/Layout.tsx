@@ -22,8 +22,6 @@ import { useActiveSection } from "@/hooks";
 import { LayoutProps, NavigationItem } from "@/types";
 
 export function Layout({ children }: LayoutProps) {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
   // Memoize navigation to prevent re-creation on every render
   const navigation: NavigationItem[] = useMemo(
     () => [
@@ -48,10 +46,17 @@ export function Layout({ children }: LayoutProps) {
     return activeSection === hash;
   };
 
-  const handleNavClickWithMenu = (href: string) => {
-    handleNavClick(href);
-    setIsMenuOpen(false);
-  };
+  const mobilePrimaryKeys = ["#sobre", "#galeria", "#realizacao"] as const;
+  const centerItem = navigation.find((item) => item.href === "#inicio");
+  const mobilePrimaryItems = mobilePrimaryKeys
+    .map((href) => navigation.find((item) => item.href === href) ?? null)
+    .filter((item): item is NavigationItem => item !== null);
+  const overflowItems = navigation.filter(
+    (item) =>
+      item.href !== "#inicio" && !mobilePrimaryKeys.includes(item.href as typeof mobilePrimaryKeys[number]),
+  );
+
+  const overflowIsActive = overflowItems.some((item) => isActivePath(item.href));
 
   return (
     <div className="min-h-screen bg-background">
