@@ -47,13 +47,13 @@ export function Layout({ children }: LayoutProps) {
   };
 
   const mobilePrimaryKeys = ["#sobre", "#galeria", "#realizacao"] as const;
+  const mobilePrimarySet = new Set<string>(mobilePrimaryKeys as unknown as string[]);
   const centerItem = navigation.find((item) => item.href === "#inicio");
   const mobilePrimaryItems = mobilePrimaryKeys
     .map((href) => navigation.find((item) => item.href === href) ?? null)
     .filter((item): item is NavigationItem => item !== null);
   const overflowItems = navigation.filter(
-    (item) =>
-      item.href !== "#inicio" && !mobilePrimaryKeys.includes(item.href as typeof mobilePrimaryKeys[number]),
+    (item) => item.href !== "#inicio" && !mobilePrimarySet.has(item.href),
   );
 
   const overflowIsActive = overflowItems.some((item) => isActivePath(item.href));
