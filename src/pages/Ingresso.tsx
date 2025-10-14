@@ -2,7 +2,6 @@ import { FormEvent, Fragment } from "react";
 import {
   ArrowRight,
   Calendar,
-  CheckCircle2,
   Clock,
   MapPin,
   Shield,
@@ -14,18 +13,11 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import SponsorsMarquee from "@/components/SponsorsMarquee";
 
 interface MarqueeImage {
   src: string;
   alt: string;
-}
-
-interface TicketTier {
-  name: string;
-  price: string;
-  description: string;
-  perks: string[];
-  highlight?: boolean;
 }
 
 const marqueeImages: MarqueeImage[] = [
@@ -52,45 +44,6 @@ const marqueeImages: MarqueeImage[] = [
   {
     src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
     alt: "Equipe comemorando resultado de hackathon",
-  },
-];
-
-const ticketTiers: TicketTier[] = [
-  {
-    name: "Passaporte Comunidade",
-    price: "R$ 120",
-    description:
-      "Acesso completo aos três dias do FING com trilhas principais e lounges de networking.",
-    perks: [
-      "Acesso a todas as palestras e painéis",
-      "Sessões de matchmaking com mentores",
-      "Certificado digital de participação",
-    ],
-  },
-  {
-    name: "Passaporte Visionário",
-    price: "R$ 220",
-    description:
-      "Experiência imersiva com áreas VIP, mentorias exclusivas e fast-track nos principais espaços.",
-    perks: [
-      "Lounge VIP com cafés especiais",
-      "Sessão de mentoria com especialistas",
-      "Kit de boas-vindas personalizado",
-      "Reservas antecipadas em workshops",
-    ],
-    highlight: true,
-  },
-  {
-    name: "Passaporte Corporativo",
-    price: "Sob consulta",
-    description:
-      "Pacote para equipes e organizações que desejam acelerar projetos com benefícios personalizados.",
-    perks: [
-      "Credenciais para até 8 integrantes",
-      "Sessão estratégica com curadoria do FING",
-      "Branding em ambientes selecionados",
-      "Acesso às gravações pós-evento",
-    ],
   },
 ];
 
@@ -306,59 +259,6 @@ export default function Ingresso() {
         </div>
       </section>
 
-      <section id="planos" className="relative bg-muted/40 py-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background/60" />
-        <div className="container relative mx-auto px-4">
-          <div className="mb-12 flex flex-col items-center text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">
-              Escolha o passaporte ideal para sua jornada
-            </h2>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Cada modalidade foi pensada para garantir a melhor experiência de
-              acordo com seus objetivos no FING.
-            </p>
-          </div>
-
-          <div className="grid gap-8 lg:grid-cols-3">
-            {ticketTiers.map((tier) => (
-              <div
-                key={tier.name}
-                className={cn(
-                  "flex h-full flex-col rounded-3xl border border-border/70 bg-background/90 p-8 shadow-xl backdrop-blur transition-transform duration-300 hover:-translate-y-2",
-                  tier.highlight && "ring-2 ring-primary",
-                )}
-              >
-                <div className="space-y-3">
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-                    {tier.name}
-                  </span>
-                  <p className="text-sm text-muted-foreground">
-                    {tier.description}
-                  </p>
-                </div>
-                <div className="mt-6 text-4xl font-bold text-foreground">
-                  {tier.price}
-                </div>
-                <ul className="mt-8 space-y-3">
-                  {tier.perks.map((perk) => (
-                    <li key={perk} className="flex items-start gap-3 text-sm">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 text-primary" />
-                      <span className="text-muted-foreground">{perk}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  className="mt-10 w-full"
-                  variant={tier.highlight ? "default" : "outline"}
-                >
-                  Quero este passaporte
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section id="inscricao" className="relative py-24">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
@@ -530,6 +430,8 @@ export default function Ingresso() {
           </div>
         </div>
       </section>
+
+      <SponsorsMarquee className="py-12" title="Patrocinadores do FING" />
 
       <section id="faq" className="relative bg-muted/40 py-24">
         <div className="container mx-auto px-4">
