@@ -47,7 +47,7 @@ export function Layout({ children }: LayoutProps) {
   };
 
   const mobilePrimaryKeys = ["#sobre", "#galeria", "#realizacao"] as const;
-  const mobilePrimarySet = new Set<string>(mobilePrimaryKeys as unknown as string[]);
+  const mobilePrimarySet = new Set<string>([...mobilePrimaryKeys]);
   const centerItem = navigation.find((item) => item.href === "#inicio");
   const mobilePrimaryItems = mobilePrimaryKeys
     .map((href) => navigation.find((item) => item.href === href) ?? null)
