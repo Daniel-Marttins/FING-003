@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import SponsorsMarquee from "@/components/SponsorsMarquee";
 
 interface MarqueeImage {
   src: string;
@@ -530,6 +531,8 @@ export default function Ingresso() {
           </div>
         </div>
       </section>
+
+      <SponsorsMarquee className="py-12" title="Patrocinadores do FING" />
 
       <section id="faq" className="relative bg-muted/40 py-24">
         <div className="container mx-auto px-4">
